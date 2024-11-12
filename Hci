@@ -1,0 +1,222 @@
+
+import java.util.*;
+
+public class temp {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int n;
+		System.out.println("Enter no of process");
+		n = s.nextInt();
+		int process[] = new int[n];
+		int bt[] = new int[n];
+		int wt[] = new int[n];
+		int tt[] = new int[n];
+		int pri[] = new int[n];
+		System.out.println("Enter time and priority for each process :");
+		for (int i = 0; i < n; i++) {
+			System.out.print("Process [" + (i + 1) + "] = ");
+			bt[i] = s.nextInt();
+			process[i] = i + 1;
+			pri[i] = s.nextInt();
+		}
+		for(int i=0;i<n;i++) {
+			for(int j=i+1; j<n;j++) {
+				if (pri[i]<pri[j]) {
+					int temp=pri[j];
+					pri[j]=pri[i];
+					pri[i]=temp;
+					
+					temp=process[j];
+					process[j]=process[i];
+					process[i]=temp;
+					
+					temp=bt[j];
+					bt[j]=bt[i];
+					bt[i]=temp;
+				}
+			}
+		}
+		System.out.println("output as per fcfs");
+		wt[0]=0;
+		float totalwt=0,totaltt=0;
+		for(int i=0;i<n;i++) {
+			if (i>0) {
+				wt[i]= wt[i-1]+ bt[i-1];
+			}
+			tt[i]=wt[i]+bt[i];
+			totalwt+=wt[i];
+			totaltt+=tt[i];
+			System.out.println(""+process[i]+bt[i]+wt[i]+tt[i]+pri[i]);
+		}
+		System.out.println("avg waiting time"+totalwt/n);
+		System.out.println("avg turnaround time"+totaltt/n);
+	}
+}
+
+package pass1;
+import java.util.concurrent.Semaphore;
+public class temp2 {
+	
+	static Semaphore mutex = new Semaphore(1);
+	static Semaphore db = new Semaphore(1);
+	static int count = 0;
+	static void reader() throws Exception {
+		
+		
+		mutex.acquire();
+		count++;
+		if(count==1) {
+			
+		db.acquire();
+		}
+		mutex.release();
+		
+		System.out.println("Reader is "+(count)+" readiing ");
+		Thread.sleep(1000);
+		mutex.acquire();
+		count--;
+		if(count==0) {
+		db.release();
+		}
+		mutex.release();
+		System.out.println("Reader is "+(count+1)+" finised ");
+	}
+	static void writer()throws Exception{
+		
+		db.acquire();
+		System.out.println("writer is writing ");
+//		Thread.sleep();
+		db.release();
+		System.out.println("writer is finised ");
+	}
+	public static void main(String[] args) throws Exception{
+		new Thread (()->{
+			try {
+				writer();
+			}catch(Exception e) {}
+		}).start();
+		new Thread (()->{
+			try {
+				reader();
+			}catch(Exception e) {}
+		}).start();
+		new Thread (()->{
+			try {
+				reader();
+			}catch(Exception e) {}
+		}).start();
+	}
+}
+
+from tkinter import *
+from tkinter import font
+
+def add():
+    t3.delete(0, 'end')
+    result = int(t1.get()) + int(t2.get())
+    t3.insert(END, str(result))
+
+def sub(event):
+    t3.delete(0, 'end')
+    num1 = int(t1.get())
+    num2 = int(t2.get())
+    result = num1 - num2
+    t3.insert(END, str(result))
+
+def mul(event):
+    t3.delete(0, 'end')
+    num1 = int(t1.get())
+    num2 = int(t2.get())
+    result = num1 * num2
+    t3.insert(END, str(result))
+
+def div(event):
+    t3.delete(0, 'end')
+    num1 = int(t1.get())
+    num2 = int(t2.get())
+    result = num1 / num2
+    t3.insert(END, str(result))
+
+# GUI setup
+window = Tk()
+window.title('Tkinter Arithmetic Operations')
+window.geometry("700x500+10+10")
+window.configure(bg='lightblue')  # Set background color for the window
+
+# Define a custom font
+custom_font = font.Font(family="Helvetica", size=12, weight="bold")
+
+# Labels
+lbl1 = Label(window, text='First Number:', bg='lightblue', fg='black', font=custom_font)
+lbl2 = Label(window, text='Second Number:', bg='lightblue', fg='black', font=custom_font)
+lbl3 = Label(window, text='Result:', bg='lightblue', fg='black', font=custom_font)
+
+# Entry fields
+t1 = Entry(window, bd=3, bg='white', fg='black', font=custom_font)
+t2 = Entry(window, bd=3, bg='white', fg='black', font=custom_font)
+t3 = Entry(window, bd=3, bg='white', fg='black', font=custom_font)
+
+# Buttons with colors and padding
+b1 = Button(window, text='Add', command=add, bg='green', fg='white', font=custom_font, padx=10, pady=5)
+b2 = Button(window, text='Subtract', bg='red', fg='white', font=custom_font, padx=10, pady=5)
+b2.bind('<Button-1>', sub)
+b3 = Button(window, text="Multiply", bg='orange', fg='white', font=custom_font, padx=10, pady=5)
+b3.bind('<Button-1>', mul)
+b4 = Button(window, text="Divide", bg='blue', fg='white', font=custom_font, padx=10, pady=5)
+b4.bind('<Button-1>', div)
+
+# Place elements with padding
+lbl1.place(x=100, y=50)
+t1.place(x=250, y=50, width=150)
+
+lbl2.place(x=100, y=100)
+t2.place(x=250, y=100, width=150)
+
+b1.place(x=100, y=150)
+b2.place(x=200, y=150)
+b3.place(x=300, y=150)
+b4.place(x=400, y=150)
+
+lbl3.place(x=100, y=210)
+t3.place(x=250, y=210, width=150)
+
+# Add some spacing
+# for widget in [lbl1, lbl2, lbl3, t1, t2, t3, b1, b2, b3, b4]:
+#     widget.pack(pady=5)
+
+window.mainloop()
+
+from tkinter import * 
+custom_font = ('Arial', 12)
+
+def validateLogin():
+    print("username entered :", usernameEntry.get())
+    print("password entered :", passwordEntry.get())
+    lognSucess = Label(tkWindow, text="Login Successful", bg='lightgreen', fg='black', font=custom_font).grid(row=5, column=1, pady=5)
+    return 
+
+def clearLogin():
+    usernameEntry.delete(0, 'end')
+    passwordEntry.delete(0, 'end')
+    logout = Label(tkWindow, text="Logout Successful", bg='lightcoral', fg='black', font=custom_font).grid(row=5, column=1, pady=5)
+    return 
+# Window 
+tkWindow = Tk()
+tkWindow.geometry('400x200')
+tkWindow.title('Welcome to Login Form') 
+tkWindow.configure(bg='lightblue')  # Set background color for the window
+# Username label and text entry box
+usernameLabel = Label(tkWindow, text="User Name", bg='lightblue', fg='black', font=custom_font).grid(row=0, column=0, padx=10, pady=10)
+username = StringVar()
+usernameEntry = Entry(tkWindow, bg='white', fg='black', font=('Arial', 12))
+usernameEntry.grid(row=0, column=1, padx=10, pady=10)
+# Password label and password entry box
+passwordLabel = Label(tkWindow, text="Password", bg='lightblue', fg='black', font=custom_font).grid(row=1, column=0, padx=10, pady=10)
+password = StringVar()
+passwordEntry = Entry(tkWindow, textvariable=password, show='*', bg='white', fg='black', font=('Arial', 12))
+passwordEntry.grid(row=1, column=1, padx=10, pady=10)
+
+loginButton = Button(tkWindow, text="Login", command=validateLogin, bg='green', fg='white', font=custom_font).grid(row=4, column=0, padx=10, pady=10)
+cancelButton = Button(tkWindow, text="Clear", command=clearLogin, bg='red', fg='white', font=custom_font).grid(row=4, column=1, padx=10, pady=10)
+
+tkWindow.mainloop()
