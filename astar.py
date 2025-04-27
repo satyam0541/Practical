@@ -32,7 +32,7 @@ def a_star(initial_state, goal_state,visited,g_x):
   neighbors=get_neighbors(initial_state)
   for n in neighbors:
     if n in visited:
-      neighbors.pop(neighbors.index(n))
+      neighbors.remove(n)
 
   for n in neighbors:
     if n==goal_state:
